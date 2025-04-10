@@ -5,7 +5,7 @@ Description: Pushes logs from CyGrid Log Streaming S3 bucket to Graylog.
 Mappings:
   Constants:
     GraylogForwarder:
-      Version: 1.1.1
+      Version: 1.1.2
 
 Parameters:
   BucketName:
