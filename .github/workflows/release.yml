@@ -26,7 +26,7 @@ jobs:
     - name: Create Release and Upload Assets
       uses: softprops/action-gh-release@v1
       with:
-        files: ./build/distributions/connexa-s3-graylog-1.0.0.zip
+        files: ./build/distributions/cygrid-s3-graylog-1.0.0.zip
         name: Release ${{ github.ref_name }}
         draft: false
         prerelease: false

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: Pushes logs from Log Streaming S3 bucket to Graylog.
+Description: Pushes logs from CyGrid Log Streaming S3 bucket to Graylog.
 
 Mappings:
   Constants:
@@ -9,7 +9,7 @@ Mappings:
 
 Parameters:
   BucketName:
-    Description: An existing AWS S3 Bucket with CloudConnexa logs. Taken from the CloudConnexa Log Streaming configuration.
+    Description: An existing AWS S3 Bucket with CyGrid logs. Taken from the CyGrid Log Streaming configuration.
     Type: String
     Default: ""
   GraylogUrl:
@@ -39,9 +39,9 @@ Parameters:
     Default: ""
     Description: DO NOT CHANGE unless you know what you are doing. Override the default location of the function source code.
   FunctionName:
-    Description: The CloudConnexa to Graylog Forwarder Lambda function name. DO NOT change when updating an existing CloudFormation stack, otherwise the current forwarder function will be replaced and all the triggers will be lost.
+    Description: The CyGrid to Graylog Forwarder Lambda function name. DO NOT change when updating an existing CloudFormation stack, otherwise the current forwarder function will be replaced and all the triggers will be lost.
     Type: String
-    Default: cloudconnexas3-to-graylog-forwarder-lambda
+    Default: cygrids3-to-graylog-forwarder-lambda
   MemorySize:
     Type: Number
     Default: 1024
@@ -58,7 +58,7 @@ Parameters:
     AllowedValues:
       - x86_64
       - arm64
-    Description: Connexa S3 Graylog Lambda function Architecture type. arm64 can achieve significantly better price than the equivalent function running on x86_64 architecture. More details https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html .
+    Description: CyGrid S3 Graylog Lambda function Architecture type. arm64 can achieve significantly better price than the equivalent function running on x86_64 architecture. More details https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html .
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -85,7 +85,7 @@ Metadata:
           - LambdaArchitecture
     ParameterLabels:
       BucketName:
-        default: "AWS S3 Bucket With CloudConnexa Logs *"
+        default: "AWS S3 Bucket With CyGrid Logs *"
       GraylogUrl:
         default: "Graylog API URL *"
       GraylogAuthToken:
@@ -165,7 +165,7 @@ Resources:
   CopyZipsFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Description: !Sub 'Copies Graylog Forwarder zip to the ${BucketName} S3 bucket'
+      Description: !Sub 'Copies CyGrid Graylog Forwarder zip to the ${BucketName} S3 bucket'
       Handler: index.handler
       Role: !GetAtt 'CopyZipsRole.Arn'
       Timeout: 300
@@ -244,13 +244,13 @@ Resources:
     Properties:
       ServiceToken: !GetAtt 'CopyZipsFunction.Arn'
       DestBucket: !Ref 'BucketName'
-      Prefix: 'CloudConnexa/'
+      Prefix: 'CyGrid/'
       Objects:
         - Fn::If:
             - SetSourceZipUrl
             - !Ref SourceZipUrl
             - Fn::Sub:
-                - "https://github.com/obliviongx/connexa-graylog-fowarder/releases/download/v${GraylogForwarderVersion}/connexa-s3-graylog-${GraylogForwarderVersion}.zip"
+                - "https://github.com/obliviongx/cygrid-graylog-fowarder/releases/download/v${GraylogForwarderVersion}/cygrid-s3-graylog-${GraylogForwarderVersion}.zip"
                 - {
                   GraylogForwarderVersion: !FindInMap [ Constants, GraylogForwarder, Version ],
                 }
@@ -289,14 +289,14 @@ Resources:
         S3Bucket: !Ref 'BucketName'
         S3Key:
           Fn::Sub:
-            - "CloudConnexa/connexa-s3-graylog-${GraylogForwarderVersion}.zip"
+            - "CyGrid/cygrid-s3-graylog-${GraylogForwarderVersion}.zip"
             - {
               GraylogForwarderVersion: !FindInMap [ Constants, GraylogForwarder, Version ],
             }
       Handler: connexas3graylog.Handler
       Role: !GetAtt LambdaIAMRole.Arn
       Runtime: java21
-      Description: The CloudConnexa to Graylog Forwarder Lambda
+      Description: The CyGrid to Graylog Forwarder Lambda
       MemorySize: !Ref MemorySize
       Timeout: !Ref Timeout
       FunctionName: !Ref FunctionName
@@ -397,7 +397,7 @@ Resources:
   CustomResourceLambdaFunction:
     Type: 'AWS::Lambda::Function'
     Properties:
-      Description: !Sub 'Trigger Graylog Forwarder lambda to the ${BucketName} S3 bucket'
+      Description: !Sub 'Trigger CyGrid Graylog Forwarder lambda to the ${BucketName} S3 bucket'
       Handler: index.lambda_handler
       Role: !GetAtt LambdaIAMRole.Arn
       Code:

@@ -39,12 +39,12 @@ public class Handler implements RequestHandler<S3Event, String> {
     private final String GRAYLOG_URL = "GRAYLOG_URL";
     private final String GRAYLOG_AUTH_TOKEN_SECRET_ARN = "GRAYLOG_AUTH_TOKEN_SECRET_ARN";
     private final String CUSTOMER_CODE = "CUSTOMER_CODE";
-    private final String LOG_SOURCE = "CloudConnexa";
+    private final String LOG_SOURCE = "CyGrid";
     private final String LOG_TAGS = "GRAYLOG_TAGS";
     private final int MAX_SIZE_PAYLOAD = 5000000;
     private final int MAX_SIZE_SINGLE_LOG = 1000000;
     private final int LOG_MAX_ENTRIES = 1000;
-    private final String OBJECT_KEY_PREFIX = "CloudConnexa";
+    private final String OBJECT_KEY_PREFIX = "CyGrid";
     private final String REGEX = ".*\\.([^.]*)\\.([^.]*)";
     private final String JSONL_TYPE = "jsonl";
     private final String GZ_TYPE = "gz";

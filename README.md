@@ -1,10 +1,10 @@
-# CloudConnexa to Graylog Forwarder
+# CyGrid to Graylog Forwarder
 
-This repository contains a Lambda function that forwards CloudConnexa logs from an S3 bucket to Graylog.
+This repository contains a Lambda function that forwards CyGrid logs from an S3 bucket to Graylog.
 
 ## Overview
 
-The CloudConnexa to Graylog Forwarder is an AWS Lambda function that:
+The CyGrid to Graylog Forwarder is an AWS Lambda function that:
 
 1. Gets triggered when new log files are uploaded to an S3 bucket
 2. Processes the log files (decompresses, reads lines)
@@ -26,7 +26,7 @@ The CloudConnexa to Graylog Forwarder is an AWS Lambda function that:
 ./gradlew build
 ```
 
-This will create a zip file in `build/distributions/connexa-s3-graylog-1.0.0.zip` that can be deployed to AWS Lambda.
+This will create a zip file in `build/distributions/cygrid-s3-graylog-1.0.0.zip` that can be deployed to AWS Lambda.
 
 ### Deploying with CloudFormation
 
@@ -34,13 +34,13 @@ You can deploy the Lambda function using the provided CloudFormation template:
 
 ```bash
 aws cloudformation deploy \
-  --template-file cloudconnexa-s3-graylog-forwarder-cloudformation.yaml \
-  --stack-name cloudconnexa-graylog-forwarder \
+  --template-file cygrid-s3-graylog-forwarder-cloudformation.yaml \
+  --stack-name cygrid-graylog-forwarder \
   --parameter-overrides \
     BucketName=your-bucket-name \
     GraylogUrl=https://your-graylog-server/api/datadog/logs \
     GraylogAuthToken=your-auth-token \
-    GraylogTags=env:prod,source:cloudconnexa \
+    GraylogTags=env:prod,source:cygrid \
     CustomerCode=your-customer-code
 ```
 
@@ -66,7 +66,7 @@ aws s3 cp test.jsonl.gz s3://your-bucket/CloudConnexa/
 Then check the CloudWatch logs to verify that the logs were sent successfully:
 
 ```bash
-aws logs filter-log-events --log-group-name /aws/lambda/cloudconnexas3-to-graylog-forwarder-lambda --filter-pattern "Successfully sent"
+aws logs filter-log-events --log-group-name /aws/lambda/cygrids3-to-graylog-forwarder-lambda --filter-pattern "Successfully sent"
 ```
 
 ## License
