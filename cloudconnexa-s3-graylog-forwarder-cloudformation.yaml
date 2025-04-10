@@ -30,6 +30,10 @@ Parameters:
     Type: String
     Default: ""
     Description: Add custom tags to forwarded logs, comma-delimited string, no trailing comma, e.g., env:prod,stack:classic
+  CustomerCode:
+    Type: String
+    Default: "default"
+    Description: The customer code to include in the header when sending logs to Graylog
   SourceZipUrl:
     Type: String
     Default: ""
@@ -70,6 +74,7 @@ Metadata:
           default: Log Forwarding (Optional)
         Parameters:
           - GraylogTags
+          - CustomerCode
       - Label:
           default: Lambda Function
         Parameters:
@@ -87,6 +92,8 @@ Metadata:
         default: "Graylog Auth Token *"
       GraylogAuthTokenSecretArn:
         default: "Graylog Auth Token Secret ARN *"
+      CustomerCode:
+        default: "Customer Code"
       SourceZipUrl:
         default: "Lambda Source Zip Url"
       FunctionName:
@@ -310,6 +317,8 @@ Resources:
               - CreateGraylogAuthTokenSecret
               - Ref: GraylogAuthTokenSecret
               - Ref: GraylogAuthTokenSecretArn
+          CUSTOMER_CODE:
+            Ref: CustomerCode
 
   LambdaInvokePermission:
     Type: 'AWS::Lambda::Permission'

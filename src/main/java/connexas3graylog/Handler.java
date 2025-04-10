@@ -38,6 +38,7 @@ public class Handler implements RequestHandler<S3Event, String> {
     private static final Logger logger = LoggerFactory.getLogger(Handler.class);
     private final String GRAYLOG_URL = "GRAYLOG_URL";
     private final String GRAYLOG_AUTH_TOKEN_SECRET_ARN = "GRAYLOG_AUTH_TOKEN_SECRET_ARN";
+    private final String CUSTOMER_CODE = "CUSTOMER_CODE";
     private final String LOG_SOURCE = "CloudConnexa";
     private final String LOG_TAGS = "GRAYLOG_TAGS";
     private final int MAX_SIZE_PAYLOAD = 5000000;
@@ -196,16 +197,23 @@ public class Handler implements RequestHandler<S3Event, String> {
                 logger.info("Sending logs to Graylog: " + jsonPayload);
                 
                 RequestBody body = RequestBody.create(jsonPayload, JSON);
+                // Get customer code from environment variable, default to "default" if not set
+                String customerCode = System.getenv(CUSTOMER_CODE);
+                if (customerCode == null || customerCode.isEmpty()) {
+                    customerCode = "default";
+                    logger.warn("CUSTOMER_CODE environment variable not set, using default value: " + customerCode);
+                }
+
                 Request request = new Request.Builder()
                         .url(graylogUrl)
                         .addHeader("Content-Type", "application/json")
                         .addHeader("AUTH", authToken)
-                        .addHeader("customer_code", "foresight")
+                        .addHeader("customer_code", customerCode)
                         .post(body)
                         .build();
 
                 // Log the headers explicitly
-                logger.info("HEADER_CHECK: customer_code=foresight is being sent to Graylog");
+                logger.info("HEADER_CHECK: customer_code=" + customerCode + " is being sent to Graylog");
 
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {

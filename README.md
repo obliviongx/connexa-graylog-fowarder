@@ -40,7 +40,8 @@ aws cloudformation deploy \
     BucketName=your-bucket-name \
     GraylogUrl=https://your-graylog-server/api/datadog/logs \
     GraylogAuthToken=your-auth-token \
-    GraylogTags=env:prod,source:cloudconnexa
+    GraylogTags=env:prod,source:cloudconnexa \
+    CustomerCode=your-customer-code
 ```
 
 ## Configuration
@@ -50,6 +51,7 @@ The Lambda function can be configured with the following environment variables:
 - `GRAYLOG_URL`: The URL of the Graylog server endpoint
 - `GRAYLOG_AUTH_TOKEN_SECRET_ARN`: The ARN of the secret in AWS Secrets Manager that contains the Graylog authentication token
 - `GRAYLOG_TAGS`: Optional tags to add to the logs
+- `CUSTOMER_CODE`: The customer code to include in the header when sending logs to Graylog (defaults to "default" if not set)
 
 ## Testing
 
