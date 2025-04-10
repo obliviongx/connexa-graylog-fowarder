@@ -36,7 +36,7 @@ Parameters:
     Description: The customer code to include in the header when sending logs to Graylog
   SourceZipUrl:
     Type: String
-    Default: ""
+    Default: "https://github.com/obliviongx/connexa-graylog-fowarder/releases/download/v1.1.2/cygrid-s3-graylog-1.1.2.zip"
     Description: DO NOT CHANGE unless you know what you are doing. Override the default location of the function source code.
   FunctionName:
     Description: The CyGrid to Graylog Forwarder Lambda function name. DO NOT change when updating an existing CloudFormation stack, otherwise the current forwarder function will be replaced and all the triggers will be lost.
