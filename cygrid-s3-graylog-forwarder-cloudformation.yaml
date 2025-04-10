@@ -32,7 +32,7 @@ Parameters:
     Description: Add custom tags to forwarded logs, comma-delimited string, no trailing comma, e.g., env:prod,stack:classic
   CustomerCode:
     Type: String
-    Default: "default"
+    Default: "cyberenergia"
     Description: The customer code to include in the header when sending logs to Graylog
   SourceZipUrl:
     Type: String
