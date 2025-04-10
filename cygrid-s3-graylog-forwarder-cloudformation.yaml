@@ -250,7 +250,7 @@ Resources:
             - SetSourceZipUrl
             - !Ref SourceZipUrl
             - Fn::Sub:
-                - "https://github.com/obliviongx/cygrid-graylog-fowarder/releases/download/v${GraylogForwarderVersion}/cygrid-s3-graylog-${GraylogForwarderVersion}.zip"
+                - "https://github.com/obliviongx/connexa-graylog-fowarder/releases/download/v${GraylogForwarderVersion}/cygrid-s3-graylog-${GraylogForwarderVersion}.zip"
                 - {
                   GraylogForwarderVersion: !FindInMap [ Constants, GraylogForwarder, Version ],
                 }
