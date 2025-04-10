@@ -5,13 +5,13 @@ Description: Pushes logs from CyGrid Log Streaming S3 bucket to Graylog.
 Mappings:
   Constants:
     GraylogForwarder:
-      Version: 1.0.0
+      Version: 1.1.1
 
 Parameters:
   BucketName:
-    Description: An existing AWS S3 Bucket with CyGrid logs. Taken from the CyGrid Log Streaming configuration.
+    Description: An existing AWS S3 Bucket with logs. Taken from the Log Streaming configuration.
     Type: String
-    Default: ""
+    Default: "ce-connexa-logs"
   GraylogUrl:
     Type: String
     Default: "https://firehose.cyberenergia.net:8443/api/datadog/logs"
@@ -85,7 +85,7 @@ Metadata:
           - LambdaArchitecture
     ParameterLabels:
       BucketName:
-        default: "AWS S3 Bucket With CyGrid Logs *"
+        default: "AWS S3 Bucket With Logs *"
       GraylogUrl:
         default: "Graylog API URL *"
       GraylogAuthToken:
@@ -134,7 +134,7 @@ Rules:
             - Fn::Equals:
                 - Ref: BucketName
                 - ""
-        AssertDescription: AWS S3 Bucket With CloudConnexa Logs must be set
+        AssertDescription: AWS S3 Bucket With Logs must be set
 
 Conditions:
   SetSourceZipUrl:
@@ -244,7 +244,7 @@ Resources:
     Properties:
       ServiceToken: !GetAtt 'CopyZipsFunction.Arn'
       DestBucket: !Ref 'BucketName'
-      Prefix: 'CyGrid/'
+      Prefix: 'CloudConnexa/'
       Objects:
         - Fn::If:
             - SetSourceZipUrl
@@ -289,7 +289,7 @@ Resources:
         S3Bucket: !Ref 'BucketName'
         S3Key:
           Fn::Sub:
-            - "CyGrid/cygrid-s3-graylog-${GraylogForwarderVersion}.zip"
+            - "CloudConnexa/cygrid-s3-graylog-${GraylogForwarderVersion}.zip"
             - {
               GraylogForwarderVersion: !FindInMap [ Constants, GraylogForwarder, Version ],
             }
